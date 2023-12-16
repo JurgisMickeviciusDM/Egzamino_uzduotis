@@ -1,2 +1,2 @@
-# Egzamino_u-duotis
-Egzamino_užduotis
+# Egzamino_užduotis
+Šio projekto tikslas yra sukurti programą, kuri geba iš teksto išrintki žodžius kurie kartojasi, daugiau, negu vieną kartą
