@@ -119,30 +119,45 @@ int main() {
     }
 
     cout << "Pasikartojantys zodziai ir ju eilutes:" << endl;
+    cout << "----------------------------------------------------------------------------------------------------------------------------------------------" << endl;
+    cout << "| Zodis                  | Eilute (Kartai(k))                                                                                                   |" << endl;
+    cout << "----------------------------------------------------------------------------------------------------------------------------------------------" << endl;
     for (const auto& zodzio_pora : sk_zodi) {
         if (bendras_sk_zodi[zodzio_pora.first] > 1) {
-            cout << zodzio_pora.first << ": ";
+            cout << "| " << zodzio_pora.first;
+            cout.width(25 - zodzio_pora.first.length());
+            cout << "| ";
+
+            stringstream eilutes_srautas;
             for (const auto& eilutes_pora : zodzio_pora.second) {
-                cout << eilutes_pora.first << "(" << eilutes_pora.second << " kartus) ";
+                eilutes_srautas << eilutes_pora.first << "(" << eilutes_pora.second << " k.) ";
             }
-            cout << endl;
+
+            string eilute = eilutes_srautas.str();
+            cout << eilute;
+            cout.width(150 - eilute.length()); 
+            cout << "|" << endl;
         }
     }
+    cout << "----------------------------------------------------------------------------------------------------------------------------------------------" << endl;
 
     cout << "\nZodziai, kurie pasikartojo daugiau negu viena karta, ir ju pasikartojimu skaicius:" << endl;
+    cout << "---------------------------------------------------------------------------" << endl;
+    cout << "| Zodis         | Pasikartojimu skaicius                                   |" << endl;
+    cout << "---------------------------------------------------------------------------" << endl;
     for (const auto& zodzio_pora : bendras_sk_zodi) {
         if (zodzio_pora.second > 1) {
-            cout << zodzio_pora.first << ": " << zodzio_pora.second << " kartus" << endl;
+            cout << "| " << zodzio_pora.first;
+            cout.width(25 - zodzio_pora.first.length());
+            cout << "| " << zodzio_pora.second << " kart.";
+            cout.width(38 - to_string(zodzio_pora.second).length());
+            cout << "|" << endl;
         }
     }
+    cout << "---------------------------------------------------------------------------" << endl;
 
 
-    /*  cout << "Pasikartojantys zodziai:" << endl;
-    for (const auto& pair : sk_zodi) {
-        if (pair.second > 1) {
-            cout << pair.first << ": " << pair.second << endl;
-        }
-    }*/
+
     Adresas(tekstas, domenas, url);
     cout << "\nDomenai:" << endl;
     for (const auto& u : url) {
