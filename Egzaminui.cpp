@@ -8,6 +8,7 @@
 #include <set>
 #include <cctype> 
 #include <algorithm>
+#include < iomanip >
 
 using namespace std;
 
@@ -45,18 +46,7 @@ void Adresas(const string& tekstas, const set<string>& domenas, vector<string>& 
         urls.push_back((*i).str());
     }
 }
-/*
-void Skaiciuoti_Zodzius(const string& tekstas, map<string, int>& sk_zodi) {
-    istringstream ss(tekstas);
-    string zodis;
-    while (ss >> zodis) {
-        zodis.erase(remove_if(zodis.begin(), zodis.end(),
-            [](char c) { return !isalpha(static_cast<unsigned char>(c)); }), zodis.end());
-        if (!zodis.empty()) {
-            sk_zodi[zodis]++;
-        }
-    }
-}*/
+
 
 
 void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {
@@ -118,6 +108,24 @@ int main() {
         bendras_sk_zodi[zodzio_pora.first] = bendras_kiekis;
     }
 
+    //1 uzd lentele
+    cout << "\nZodziai, kurie pasikartojo daugiau negu viena karta, ir ju pasikartojimu skaicius:" << endl;
+    cout << "---------------------------------------------------------------------------" << endl;
+    cout << "| Zodis         | Pasikartojimu skaicius                                   |" << endl;
+    cout << "---------------------------------------------------------------------------" << endl;
+    for (const auto& zodzio_pora : bendras_sk_zodi) {
+        if (zodzio_pora.second > 1) {
+            cout << "| " << zodzio_pora.first;
+            cout.width(25 - zodzio_pora.first.length());
+            cout << "| " << zodzio_pora.second << " kart.";
+            cout.width(38 - to_string(zodzio_pora.second).length());
+            cout << "|" << endl;
+        }
+    }
+    cout << "---------------------------------------------------------------------------" << endl;
+
+
+    //2 uzd lentele
     cout << "Pasikartojantys zodziai ir ju eilutes:" << endl;
     cout << "----------------------------------------------------------------------------------------------------------------------------------------------" << endl;
     cout << "| Zodis                  | Eilute (Kartai(k))                                                                                                   |" << endl;
@@ -135,34 +143,25 @@ int main() {
 
             string eilute = eilutes_srautas.str();
             cout << eilute;
-            cout.width(150 - eilute.length()); 
+            cout.width(150 - eilute.length());
             cout << "|" << endl;
         }
     }
     cout << "----------------------------------------------------------------------------------------------------------------------------------------------" << endl;
-
-    cout << "\nZodziai, kurie pasikartojo daugiau negu viena karta, ir ju pasikartojimu skaicius:" << endl;
-    cout << "---------------------------------------------------------------------------" << endl;
-    cout << "| Zodis         | Pasikartojimu skaicius                                   |" << endl;
-    cout << "---------------------------------------------------------------------------" << endl;
-    for (const auto& zodzio_pora : bendras_sk_zodi) {
-        if (zodzio_pora.second > 1) {
-            cout << "| " << zodzio_pora.first;
-            cout.width(25 - zodzio_pora.first.length());
-            cout << "| " << zodzio_pora.second << " kart.";
-            cout.width(38 - to_string(zodzio_pora.second).length());
-            cout << "|" << endl;
-        }
-    }
-    cout << "---------------------------------------------------------------------------" << endl;
-
-
-
+    
+    
+    //3 uzd lentele 
+    cout << "|                       Domenai                     |" << endl;
+    cout<<"------------------------------------------------------" << endl;
     Adresas(tekstas, domenas, url);
-    cout << "\nDomenai:" << endl;
+   
     for (const auto& u : url) {
-        cout << u << endl;
+        cout << "| "<< setw(50) <<left  << u << "|" << endl;
     }
-
+    cout << "------------------------------------------------------" << endl;
     return 0;
 }
+
+
+
+
