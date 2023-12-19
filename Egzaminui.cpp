@@ -8,9 +8,13 @@
 #include <set>
 #include <cctype> 
 #include <algorithm>
-#include < iomanip >
+#include <iomanip>
+#include <functional>
 
 using namespace std;
+
+void naudotojas(std::string& Ivedimas, std::string& Pasirinkiams);
+
 
 void Domenai(set<string>& domenas) {
     ifstream Domenai_failas("domenai.txt");
@@ -70,8 +74,31 @@ void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {
     }
 }
 
+using PrintFunction = function<void(ostream&)>;
+
+void Isvedimas(const string& Ivedimas, const vector<PrintFunction>& printFunctions, const vector<string>& filenames) {
+    if (Ivedimas == "e") {
+        for (const auto& printFunction : printFunctions) {
+            printFunction(cout); 
+        }
+    }
+    else if (Ivedimas == "f") {
+        for (size_t i = 0; i < printFunctions.size(); ++i) {
+            ofstream outFile(filenames[i]);
+            if (outFile.is_open()) {
+                printFunctions[i](outFile); 
+            }
+            outFile.close();
+        }
+    }
+}
+
 
 int main() {
+    string Ivedimas, pasirinkimas;
+    naudotojas(Ivedimas, pasirinkimas);
+
+
     ifstream failas("seimas.txt");
     if (!failas.is_open()) {
         cerr << "Nepavyko atidaryti failo." << endl;
