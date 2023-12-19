@@ -13,7 +13,7 @@
 
 using namespace std;
 
-void naudotojas(std::string& Ivedimas, std::string& Pasirinkiams);
+void naudotojas(std::string& Ivedimas);
 
 
 void Domenai(set<string>& domenas) {
@@ -94,12 +94,56 @@ void Isvedimas(const string& Ivedimas, const vector<PrintFunction>& printFunctio
 }
 
 
+void ZodziuSkaicius(ostream& os, const map<string, int>& wordCounts) {
+    os << "|---------------------------------------------------------------------|" << endl;
+    os << "| Zodis                  | Pasikartojimu skaicius                     |" << endl;
+    os << "|---------------------------------------------------------------------|" << endl;
+    for (const auto& zodzio_pora : wordCounts) {
+        if (zodzio_pora.second > 1) {
+            os << "| " << left << setw(25) << zodzio_pora.first << "| " << right << setw(25) << zodzio_pora.second << " kart." << " |" << endl;
+        }
+    }
+    os << "-----------------------------------------------------------------------" << endl;
+}
+
+void ZodisVieta(ostream& os, const map<string, map<int, int>>& wordLocations, const map<string, int>& totalWordCounts) {
+    os << "Pasikartojantys zodziai ir ju eilutes:" << endl;
+    os << "|-----------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
+    os << "| Zodis                  | Eilute (Kartai(k))                                                                                                               |" << endl;
+    os << "|-----------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
+    for (const auto& zodzio_pora : wordLocations) {
+        if (totalWordCounts.at(zodzio_pora.first) > 1) {
+            os << "| " << left << setw(25) << zodzio_pora.first << "| ";
+
+            stringstream eilutes_srautas;
+            for (const auto& eilutes_pora : zodzio_pora.second) {
+                eilutes_srautas << eilutes_pora.first << "(" << eilutes_pora.second << " k.) ";
+            }
+
+            string eilute = eilutes_srautas.str();
+            os << eilute;
+            os << "|" << endl;
+        }
+    }
+    os << "|------------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
+}
+
+void Domenai_adresai(ostream& os, const vector<string>& urls) {
+    os << "|                       Domenai                     |" << endl;
+    os << "------------------------------------------------------" << endl;
+    for (const auto& u : urls) {
+        os << "| " << setw(50) << left << u << "|" << endl;
+    }
+    os << "------------------------------------------------------" << endl;
+}
+
+
+
 int main() {
-    string Ivedimas, pasirinkimas;
-    naudotojas(Ivedimas, pasirinkimas);
+    string Ivedimas;
+    naudotojas(Ivedimas); 
 
-
-    ifstream failas("seimas.txt");
+    ifstream failas("Tekstas.txt");
     if (!failas.is_open()) {
         cerr << "Nepavyko atidaryti failo." << endl;
         return 1;
@@ -116,8 +160,7 @@ int main() {
     Domenai(domenas);
 
     map<string, map<int, int>> sk_zodi;
-
-    failas.open("seimas.txt");
+    failas.open("Tekstas.txt");
     if (!failas.is_open()) {
         cerr << "Nepavyko atidaryti failo antrą kartą." << endl;
         return 1;
@@ -135,60 +178,27 @@ int main() {
         bendras_sk_zodi[zodzio_pora.first] = bendras_kiekis;
     }
 
-    //1 uzd lentele
-    cout << "\nZodziai, kurie pasikartojo daugiau negu viena karta, ir ju pasikartojimu skaicius:" << endl;
-    cout << "|---------------------------------------------------------------------|" << endl;
-    cout << "| Zodis                  | Pasikartojimu skaicius                     |" << endl;
-    cout << "|---------------------------------------------------------------------|" << endl;
-    for (const auto& zodzio_pora : bendras_sk_zodi) {
-        if (zodzio_pora.second > 1) {
-            cout << "| " << zodzio_pora.first;
-            cout.width(25 - zodzio_pora.first.length());
-            cout << "| " << zodzio_pora.second << " kart.";
-            cout.width(38 - to_string(zodzio_pora.second).length());
-            cout << "|" << endl;
-        }
+    Adresas(tekstas, domenas, url); 
+
+    if (Ivedimas == "e") {
+        ZodziuSkaicius(cout, bendras_sk_zodi);
+        ZodisVieta(cout, sk_zodi, bendras_sk_zodi);
+        Domenai_adresai(cout, url);
     }
-    cout << "-----------------------------------------------------------------------" << endl;
+    else if (Ivedimas == "f") {
+        ofstream outFile1("Zodziai_pasikartojimu_skacius.txt");
+        ZodziuSkaicius(outFile1, bendras_sk_zodi);
+        outFile1.close();
 
+        ofstream outFile2("Zodziu_pasikartojimu_eilutes.txt");
+        ZodisVieta(outFile2, sk_zodi, bendras_sk_zodi);
+        outFile2.close();
 
-    //2 uzd lentele
-    cout << "Pasikartojantys zodziai ir ju eilutes:" << endl;
-    cout << "|-----------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
-    cout << "| Zodis                  | Eilute (Kartai(k))                                                                                                               |" << endl;
-    cout << "|-----------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
-    for (const auto& zodzio_pora : sk_zodi) {
-        if (bendras_sk_zodi[zodzio_pora.first] > 1) {
-            cout << "| " << zodzio_pora.first;
-            cout.width(25 - zodzio_pora.first.length());
-            cout << "| ";
-
-            stringstream eilutes_srautas;
-            for (const auto& eilutes_pora : zodzio_pora.second) {
-                eilutes_srautas << eilutes_pora.first << "(" << eilutes_pora.second << " k.) ";
-            }
-
-            string eilute = eilutes_srautas.str();
-            cout << eilute;
-            cout.width(130 - eilute.length());
-            cout << "|" << endl;
-        }
+        ofstream outFile3("Domenai_web_adresai.txt");
+        Domenai_adresai(outFile3, url);
+        outFile3.close();
     }
-    cout << "|------------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
-    
-    
-    //3 uzd lentele 
-    cout << "|                       Domenai                     |" << endl;
-    cout<<"------------------------------------------------------" << endl;
-    Adresas(tekstas, domenas, url);
-   
-    for (const auto& u : url) {
-        cout << "| "<< setw(50) <<left  << u << "|" << endl;
-    }
-    cout << "------------------------------------------------------" << endl;
     return 0;
 }
-
-
 
 
