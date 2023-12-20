@@ -19,8 +19,8 @@ void Adresas(const string& tekstas, const set<string>& domenas, vector<string>& 
 void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi);
 using PrintFunction = function<void(ostream&)>;
 void Isvedimas(const string& Ivedimas, const vector<PrintFunction>& printFunctions, const vector<string>& filenames);
-void ZodziuSkaicius(ostream& os, const map<string, int>& wordCounts);
-void ZodisVieta(ostream& os, const map<string, map<int, int>>& wordLocations, const map<string, int>& totalWordCounts);
+void ZodziuSkaicius(ostream& os, const map<string, int>& zodziu__viso);
+void ZodisVieta(ostream& os, const map<string, map<int, int>>& wordLocations, const map<string, int>& zod_viso_sk);
 void Domenai_adresai(ostream& os, const vector<string>& urls);
 
 
@@ -48,7 +48,7 @@ int main() {
     map<string, map<int, int>> sk_zodi;
     failas.open("Tekstas.txt");
     if (!failas.is_open()) {
-        cerr << "Nepavyko atidaryti failo antrą kartą." << endl;
+        cerr << "Nepavyko atidaryti failo." << endl;
         return 1;
     }
 

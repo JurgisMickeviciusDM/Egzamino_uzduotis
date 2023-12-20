@@ -36,19 +36,28 @@ void naudotojas(string& Ivedimas) {
 }
 
 void Domenai(set<string>& domenas) {
-    ifstream Domenai_failas("domenai.txt");
-    string tld; // tld auksiausiolygiodomenai angliskai topleveldomens 
+    ifstream Domenai_failas;
+    string tld;
+    string failoPavadinimas = "domenai.txt";
 
-    if (Domenai_failas.is_open()) {
-        while (getline(Domenai_failas, tld)) {
-            if (!tld.empty()) {
-                domenas.insert(tld);
+    while (true) {
+        Domenai_failas.open(failoPavadinimas);
+        if (Domenai_failas.is_open()) {
+            while (getline(Domenai_failas, tld)) {
+                if (!tld.empty()) {
+                    domenas.insert(tld);
+                }
             }
+            Domenai_failas.close();
+            break;
         }
-        Domenai_failas.close();
-    }
-    else {
-        cerr << "Nepavyko atidaryti." << endl;
+        else {
+            cerr << "Nepavyko atidaryti failo, iveskite pavadinima failo " << failoPavadinimas << ". Áveskite naujà pavadinimà: ";
+            cin >> failoPavadinimas; 
+            
+            Domenai_failas.clear();
+            Domenai_failas.seekg(0, ios::beg);
+        }
     }
 }
 
@@ -113,25 +122,25 @@ void Isvedimas(const string& Ivedimas, const vector<PrintFunction>& printFunctio
 }
 
 
-void ZodziuSkaicius(ostream& os, const map<string, int>& wordCounts) {
+void ZodziuSkaicius(ostream& os, const map<string, int>& zodziu__viso) {
     os << "|---------------------------------------------------------------------|" << endl;
-    os << "| Zodis                  | Pasikartojimu skaicius                     |" << endl;
+    os << "| Zodis                    | Pasikartojimu skaicius                   |" << endl;
     os << "|---------------------------------------------------------------------|" << endl;
-    for (const auto& zodzio_pora : wordCounts) {
+    for (const auto& zodzio_pora : zodziu__viso) {
         if (zodzio_pora.second > 1) {
-            os << "| " << left << setw(25) << zodzio_pora.first << "| " << right << setw(25) << zodzio_pora.second << " kart." << " |" << endl;
+            os << "| " << left << setw(25) << zodzio_pora.first << "| " << left << setw(34) << zodzio_pora.second << " kart." << " |" << endl;
         }
     }
     os << "-----------------------------------------------------------------------" << endl;
 }
 
-void ZodisVieta(ostream& os, const map<string, map<int, int>>& wordLocations, const map<string, int>& totalWordCounts) {
+void ZodisVieta(ostream& os, const map<string, map<int, int>>& zod_vieta, const map<string, int>& zod_viso_sk) {
     os << "Pasikartojantys zodziai ir ju eilutes:" << endl;
     os << "|-----------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
-    os << "| Zodis                  | Eilute (Kartai(k))                                                                                                               |" << endl;
+    os << "| Zodis                    | Eilute (Kartai(k))                                                                                                             |" << endl;
     os << "|-----------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
-    for (const auto& zodzio_pora : wordLocations) {
-        if (totalWordCounts.at(zodzio_pora.first) > 1) {
+    for (const auto& zodzio_pora : zod_vieta) {
+        if (zod_viso_sk.at(zodzio_pora.first) > 1) {
             os << "| " << left << setw(25) << zodzio_pora.first << "| ";
 
             stringstream eilutes_srautas;
@@ -141,18 +150,19 @@ void ZodisVieta(ostream& os, const map<string, map<int, int>>& wordLocations, co
 
             string eilute = eilutes_srautas.str();
             os << eilute;
-            os << "|" << endl;
+            os << right << setw(120) << "|" << endl;
         }
     }
-    os << "|------------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
+    os << "|-----------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
 }
 
 void Domenai_adresai(ostream& os, const vector<string>& urls) {
+    os << "Domentai:" << endl;
     os << "|                       Domenai                     |" << endl;
-    os << "------------------------------------------------------" << endl;
+    os << "----------------------------------------------------" << endl;
     for (const auto& u : urls) {
         os << "| " << setw(50) << left << u << "|" << endl;
     }
-    os << "------------------------------------------------------" << endl;
+    os << "----------------------------------------------------" << endl;
 }
 
