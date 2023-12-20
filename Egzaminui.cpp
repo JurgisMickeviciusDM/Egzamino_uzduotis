@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <iomanip>
 #include <functional>
+#include <Windows.h>
 
 using namespace std;
 
@@ -26,6 +27,8 @@ void Domenai_adresai(ostream& os, const vector<string>& urls);
 
 
 int main() {
+    SetConsoleOutputCP(CP_UTF8);
+    setlocale(LC_ALL, "en_US.UTF-8");
     string Ivedimas;
     naudotojas(Ivedimas); 
 

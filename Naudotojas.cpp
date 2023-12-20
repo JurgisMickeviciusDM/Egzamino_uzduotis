@@ -12,11 +12,30 @@
 #include <algorithm>
 #include <iomanip>
 #include <functional>
+#include <codecvt>
+#include <locale>
+
+
 
 using namespace std;
-
+/*
 void toLowercase(string& str) {
     transform(str.begin(), str.end(), str.begin(), ::tolower);
+}
+*/
+void toLowercase(string& str) {
+    
+    map<char, char> lithuanianChars = {
+        {'À', 'à'}, {'È', 'è'}, {'Æ', 'æ'}, {'Ë', 'ë'},
+        {'Á', 'á'}, {'Ð', 'ð'}, {'Ø', 'ø'}, {'Û', 'û'}, {'Þ', 'þ'}
+    };
+
+    transform(str.begin(), str.end(), str.begin(),
+        [&lithuanianChars](unsigned char c) -> char {
+            auto it = lithuanianChars.find(c);
+            if (it != lithuanianChars.end()) return it->second;
+            return std::tolower(c);
+        });
 }
 
 void naudotojas(string& Ivedimas) {
@@ -80,7 +99,7 @@ void Adresas(const string& tekstas, const set<string>& domenas, vector<string>& 
 }
 
 
-
+/*
 void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {
     string eilute, zodis;
     int eilutes_nr = 1;
@@ -88,9 +107,31 @@ void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {
         istringstream ss(eilute);
         map<string, int> eilutes_zodziai;
         while (ss >> zodis) {
+            // Custom logic to remove non-alphabetic characters
             zodis.erase(remove_if(zodis.begin(), zodis.end(),
-                [](char c) { return !isalpha(static_cast<unsigned char>(c)); }), zodis.end());
-            transform(zodis.begin(), zodis.end(), zodis.begin(), ::tolower);
+                [](unsigned char c) { return !isalpha(c) && c < 128; }), zodis.end());
+            toLowercase(zodis); // Use the custom toLowercase function
+            if (!zodis.empty()) {
+                eilutes_zodziai[zodis]++;
+            }
+        }
+        for (const auto& zodzio_pora : eilutes_zodziai) {
+            sk_zodi[zodzio_pora.first][eilutes_nr] = zodzio_pora.second;
+        }
+        eilutes_nr++;
+    }
+}*/
+void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {
+    string eilute, zodis;
+    int eilutes_nr = 1;
+    while (getline(failas, eilute)) {
+        istringstream ss(eilute);
+        map<string, int> eilutes_zodziai;
+        while (ss >> zodis) {
+            // Custom logic to remove non-alphabetic characters
+            zodis.erase(remove_if(zodis.begin(), zodis.end(),
+                [](unsigned char c) { return !isalpha(c) && c < 128; }), zodis.end());
+            toLowercase(zodis); // Use the custom toLowercase function
             if (!zodis.empty()) {
                 eilutes_zodziai[zodis]++;
             }
