@@ -121,6 +121,7 @@ void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {
         eilutes_nr++;
     }
 }*/
+
 void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {
     string eilute, zodis;
     int eilutes_nr = 1;
@@ -128,11 +129,12 @@ void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {
         istringstream ss(eilute);
         map<string, int> eilutes_zodziai;
         while (ss >> zodis) {
-            // Custom logic to remove non-alphabetic characters
             zodis.erase(remove_if(zodis.begin(), zodis.end(),
                 [](unsigned char c) { return !isalpha(c) && c < 128; }), zodis.end());
-            toLowercase(zodis); // Use the custom toLowercase function
-            if (!zodis.empty()) {
+            toLowercase(zodis); 
+
+            
+            if (!zodis.empty() && zodis.find_first_of(".,-„“–") == string::npos) {
                 eilutes_zodziai[zodis]++;
             }
         }
@@ -175,6 +177,9 @@ void ZodziuSkaicius(ostream& os, const map<string, int>& zodziu__viso) {
     os << "-----------------------------------------------------------------------" << endl;
 }
 
+
+/*
+
 void ZodisVieta(ostream& os, const map<string, map<int, int>>& zod_vieta, const map<string, int>& zod_viso_sk) {
     os << "Pasikartojantys zodziai ir ju eilutes:" << endl;
     os << "|-----------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
@@ -195,7 +200,33 @@ void ZodisVieta(ostream& os, const map<string, map<int, int>>& zod_vieta, const 
         }
     }
     os << "|-----------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
+}*/
+
+void ZodisVieta(ostream& os, const map<string, map<int, int>>& zod_vieta, const map<string, int>& zod_viso_sk) {
+    int wordWidth = 25; 
+    int locationWidth = 180; 
+
+    os << "Pasikartojantys zodziai ir ju eilutes:" << endl;
+    os << "|-----------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
+    os << "| Zodis" << setw(wordWidth - 10) << " | Eilute (Kartai(k))" << setw(locationWidth - 24) << " |" << endl;
+    os << "|-----------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
+
+    for (const auto& zodzio_pora : zod_vieta) {
+        if (zod_viso_sk.at(zodzio_pora.first) > 1) {
+            os << "| " << left << setw(wordWidth) << zodzio_pora.first << "| ";
+
+            stringstream eilutes_srautas;
+            for (const auto& eilutes_pora : zodzio_pora.second) {
+                eilutes_srautas << eilutes_pora.first << "(" << eilutes_pora.second << " k.) ";
+            }
+
+            string eilute = eilutes_srautas.str();
+            os << left << setw(locationWidth) << eilute << "|" << endl;
+        }
+    }
+    os << "|-----------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
 }
+
 
 void Domenai_adresai(ostream& os, const vector<string>& urls) {
     os << "Domentai:" << endl;
