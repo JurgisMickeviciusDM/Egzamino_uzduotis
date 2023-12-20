@@ -18,22 +18,18 @@
 
 
 using namespace std;
-/*
-void toLowercase(string& str) {
-    transform(str.begin(), str.end(), str.begin(), ::tolower);
-}
-*/
-void toLowercase(string& str) {
+
+void mazosios_raides(string& str) {
     
-    map<char, char> lithuanianChars = {
+    map<char, char> LTU = {
         {'À', 'à'}, {'È', 'è'}, {'Æ', 'æ'}, {'Ë', 'ë'},
         {'Á', 'á'}, {'Ð', 'ð'}, {'Ø', 'ø'}, {'Û', 'û'}, {'Þ', 'þ'}
     };
 
     transform(str.begin(), str.end(), str.begin(),
-        [&lithuanianChars](unsigned char c) -> char {
-            auto it = lithuanianChars.find(c);
-            if (it != lithuanianChars.end()) return it->second;
+        [&LTU](unsigned char c) -> char {
+            auto it = LTU.find(c);
+            if (it != LTU.end()) return it->second;
             return std::tolower(c);
         });
 }
@@ -42,7 +38,7 @@ void naudotojas(string& Ivedimas) {
     do {
         cout << "Pasirinkite ar duomenis isves i faila ar i ekrana tiesiog. F-failas, E-ekranas ";
         cin >> Ivedimas;
-        toLowercase(Ivedimas);
+        mazosios_raides(Ivedimas);
         if (Ivedimas != "f" && Ivedimas != "e") {
             cout << "Neteisingai parasete! Bandykite dar karta." << endl;
         }
@@ -110,7 +106,7 @@ void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {
             // Custom logic to remove non-alphabetic characters
             zodis.erase(remove_if(zodis.begin(), zodis.end(),
                 [](unsigned char c) { return !isalpha(c) && c < 128; }), zodis.end());
-            toLowercase(zodis); // Use the custom toLowercase function
+            mazosios_raides(zodis); // Use the custom mazosios_raides function
             if (!zodis.empty()) {
                 eilutes_zodziai[zodis]++;
             }
@@ -132,7 +128,7 @@ void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {
            
             zodis.erase(remove_if(zodis.begin(), zodis.end(),
                 [](unsigned char c) { return !isalpha(c) && c < 128; }), zodis.end());
-            toLowercase(zodis); 
+            mazosios_raides(zodis); 
 
             if (!zodis.empty() && zodis.find_first_of(".,-„“–“”") == string::npos) {
                 eilutes_zodziai[zodis]++;
@@ -145,19 +141,19 @@ void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {
     }
 }
 
-using PrintFunction = function<void(ostream&)>;
+using Sp_funkcija = function<void(ostream&)>;
 
-void Isvedimas(const string& Ivedimas, const vector<PrintFunction>& printFunctions, const vector<string>& filenames) {
+void Isvedimas(const string& Ivedimas, const vector<Sp_funkcija>& sp, const vector<string>& Failopavad) {
     if (Ivedimas == "e") {
-        for (const auto& printFunction : printFunctions) {
-            printFunction(cout);
+        for (const auto& Sp_funkcija : sp) {
+            Sp_funkcija(cout);
         }
     }
     else if (Ivedimas == "f") {
-        for (size_t i = 0; i < printFunctions.size(); ++i) {
-            ofstream outFile(filenames[i]);
+        for (size_t i = 0; i < sp.size(); ++i) {
+            ofstream outFile(Failopavad[i]);
             if (outFile.is_open()) {
-                printFunctions[i](outFile);
+                sp[i](outFile);
             }
             outFile.close();
         }
