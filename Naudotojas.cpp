@@ -129,12 +129,12 @@ void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {
         istringstream ss(eilute);
         map<string, int> eilutes_zodziai;
         while (ss >> zodis) {
+           
             zodis.erase(remove_if(zodis.begin(), zodis.end(),
                 [](unsigned char c) { return !isalpha(c) && c < 128; }), zodis.end());
             toLowercase(zodis); 
 
-            
-            if (!zodis.empty() && zodis.find_first_of(".,-„“–") == string::npos) {
+            if (!zodis.empty() && zodis.find_first_of(".,-„“–“”") == string::npos) {
                 eilutes_zodziai[zodis]++;
             }
         }
@@ -164,7 +164,19 @@ void Isvedimas(const string& Ivedimas, const vector<PrintFunction>& printFunctio
     }
 }
 
+int UTF8lietuviskuraidziutolygumas(const std::string& str) {
+    int count = 0;
+    for (unsigned char c : str) {
+        
+        if ((c & 0xC0) != 0x80) {
+            ++count;
+        }
+    }
+    return count;
+}
 
+
+/*
 void ZodziuSkaicius(ostream& os, const map<string, int>& zodziu__viso) {
     os << "|---------------------------------------------------------------------|" << endl;
     os << "| Zodis                    | Pasikartojimu skaicius                   |" << endl;
@@ -175,6 +187,27 @@ void ZodziuSkaicius(ostream& os, const map<string, int>& zodziu__viso) {
         }
     }
     os << "-----------------------------------------------------------------------" << endl;
+}
+*/
+
+void ZodziuSkaicius(std::ostream& os, const std::map<std::string, int>& zodziu__viso) {
+    os << "|---------------------------------------------------------------------|" << std::endl;
+    os << "| Zodis                    | Pasikartojimu skaicius                   |" << std::endl;
+    os << "|---------------------------------------------------------------------|" << std::endl;
+
+    for (const auto& zodzio_pora : zodziu__viso) {
+        if (zodzio_pora.first.find(".") != std::string::npos) {
+            continue;
+        }
+
+        if (zodzio_pora.second > 1) {
+            int utf8Adjustment = zodzio_pora.first.size() - UTF8lietuviskuraidziutolygumas(zodzio_pora.first);
+            os << "| " << std::left << std::setw(25 + utf8Adjustment) << zodzio_pora.first
+                << "| " << std::left << std::setw(34) << zodzio_pora.second << " kart." << " |" << std::endl;
+        }
+    }
+
+    os << "-----------------------------------------------------------------------" << std::endl;
 }
 
 
@@ -201,19 +234,19 @@ void ZodisVieta(ostream& os, const map<string, map<int, int>>& zod_vieta, const 
     }
     os << "|-----------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
 }*/
-
+/*
 void ZodisVieta(ostream& os, const map<string, map<int, int>>& zod_vieta, const map<string, int>& zod_viso_sk) {
-    int wordWidth = 25; 
+    int plotisstulpelio1 = 25; 
     int locationWidth = 180; 
 
     os << "Pasikartojantys zodziai ir ju eilutes:" << endl;
     os << "|-----------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
-    os << "| Zodis" << setw(wordWidth - 10) << " | Eilute (Kartai(k))" << setw(locationWidth - 24) << " |" << endl;
+    os << "| Zodis" << setw(plotisstulpelio1 - 10) << " | Eilute (Kartai(k))" << setw(locationWidth - 24) << " |" << endl;
     os << "|-----------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
 
     for (const auto& zodzio_pora : zod_vieta) {
         if (zod_viso_sk.at(zodzio_pora.first) > 1) {
-            os << "| " << left << setw(wordWidth) << zodzio_pora.first << "| ";
+            os << "| " << left << setw(plotisstulpelio1) << zodzio_pora.first << "| ";
 
             stringstream eilutes_srautas;
             for (const auto& eilutes_pora : zodzio_pora.second) {
@@ -226,7 +259,33 @@ void ZodisVieta(ostream& os, const map<string, map<int, int>>& zod_vieta, const 
     }
     os << "|-----------------------------------------------------------------------------------------------------------------------------------------------------------|" << endl;
 }
+*/
 
+void ZodisVieta(std::ostream& os, const std::map<std::string, std::map<int, int>>& zod_vieta, const std::map<std::string, int>& zod_viso_sk) {
+    int plotisstulpelio1 = 25;  
+    int plotisstulp = 180;  
+
+    os << "Pasikartojantys zodziai ir ju eilutes:" << std::endl;
+    os << "|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|" << std::endl;
+    os << "|Zodis                     | Eilute(Kartai(k))                                                                                                                                                                   | " << std::endl;
+    os << "|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|" << std::endl;
+
+    for (const auto& zodzio_pora : zod_vieta) {
+        if (zod_viso_sk.at(zodzio_pora.first) > 1) {
+            int Tolygumas = zodzio_pora.first.size() - UTF8lietuviskuraidziutolygumas(zodzio_pora.first);
+            os << "| " << std::left << std::setw(plotisstulpelio1 + Tolygumas) << zodzio_pora.first << "| ";
+
+            std::stringstream eilutes_srautas;
+            for (const auto& eilutes_pora : zodzio_pora.second) {
+                eilutes_srautas << eilutes_pora.first << "(" << eilutes_pora.second << " k.) ";
+            }
+
+            std::string eilute = eilutes_srautas.str();
+            os << std::left << std::setw(plotisstulp) << eilute << "|" << std::endl;
+        }
+    }
+    os << "|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|" << std::endl;
+}
 
 void Domenai_adresai(ostream& os, const vector<string>& urls) {
     os << "Domentai:" << endl;
