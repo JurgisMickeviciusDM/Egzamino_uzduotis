@@ -81,19 +81,19 @@ void Domenai(set<string>& domenas) { // domenu  galunes sudedam i set
 
 void Adresas(const string& tekstas, const set<string>& domenas, vector<string>& urls) {
     string tldreguliari_israiska;//reguliari israiska
-    for (const auto& tld : domenas) {
-        if (!tldreguliari_israiska.empty()) {
+    for (const auto& tld : domenas) {//for ciklas iteruos per domenas
+        if (!tldreguliari_israiska.empty()) {//jei netuscia
             tldreguliari_israiska += "|";
         }
-        tldreguliari_israiska += "\\." + tld;
+        tldreguliari_israiska += "\\." + tld;//pasaliname taska
     }
 
-    regex urlRegex("(https?://)?[a-zA-Z0-9\\-\\.]+(" + tldreguliari_israiska + ")\\b");
+    regex urlRegex("(https?://)?[a-zA-Z0-9\\-\\.]+(" + tldreguliari_israiska + ")\\b");// turi atitikti tldreguliari israiska su b atskiriame 
     auto zodis_pradzia = sregex_iterator(tekstas.begin(), tekstas.end(), urlRegex);
-    auto zodis_pabaiga = sregex_iterator();
+    auto zodis_pabaiga = sregex_iterator();// auto iteruoja nuo pradzios iki pabaigos 
 
     for (sregex_iterator i = zodis_pradzia; i != zodis_pabaiga; ++i) {
-        urls.push_back((*i).str());
+        urls.push_back((*i).str());//pridedame su push back'u
     }
 }
 
