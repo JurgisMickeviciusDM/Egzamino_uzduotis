@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 #include <fstream>
 #include <sstream>
-#include <map>
+#include <map> // map asociatyvus konteineriai biblioteka 
 #include <vector>
 #include <regex>
 #include <locale>
@@ -27,10 +27,10 @@ void Domenai_adresai(ostream& os, const vector<string>& urls);
 
 
 int main() {
-    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8); //kodavimui utf-8
     setlocale(LC_ALL, "en_US.UTF-8");
     string Ivedimas;
-    naudotojas(Ivedimas); 
+    naudotojas(Ivedimas); //naudotojo funckija 
 
     ifstream failas("Tekstas.txt");
     if (!failas.is_open()) {
@@ -38,27 +38,27 @@ int main() {
         return 1;
     }
 
-    vector<string> url;
+    vector<string> url;// vektorius url saugojimui
     string tekstas, eilute;
     while (getline(failas, eilute)) {
-        tekstas += eilute + "\n";
+        tekstas += eilute + "\n"; //apjungiame eilutes i teksta  
     }
     failas.close();
 
     set<string> domenas;
-    Domenai(domenas);
+    Domenai(domenas);// nsuakitome su domenas funckcija domenus 
 
-    map<string, map<int, int>> sk_zodi;
+    map<string, map<int, int>> sk_zodi;// asciatyvus konteineris map zodziam ir kartu skaiciu saugoit
     failas.open("Tekstas.txt");
     if (!failas.is_open()) {
         cerr << "Nepavyko atidaryti failo." << endl;
         return 1;
     }
 
-    Skaiciuoti_Zodzius(failas, sk_zodi);
+    Skaiciuoti_Zodzius(failas, sk_zodi);//skaiciavimas zodziu
     failas.close();
 
-    map<string, int> bendras_sk_zodi;
+    map<string, int> bendras_sk_zodi;//asociatyvus konteineris saugo pasikartojimu sk 
     for (const auto& zodzio_pora : sk_zodi) {
         int bendras_kiekis = 0;
         for (const auto& eilutes_pora : zodzio_pora.second) {
@@ -67,7 +67,7 @@ int main() {
         bendras_sk_zodi[zodzio_pora.first] = bendras_kiekis;
     }
 
-    Adresas(tekstas, domenas, url); 
+    Adresas(tekstas, domenas, url); // url nustatymas 
 
     if (Ivedimas == "e") {
         ZodziuSkaicius(cout, bendras_sk_zodi);
@@ -89,5 +89,4 @@ int main() {
     }
     return 0;
 }
-
 

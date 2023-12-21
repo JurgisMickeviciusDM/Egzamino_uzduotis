@@ -52,7 +52,8 @@ void naudotojas(string& Ivedimas) {
     
 }
 //set string asociatyvus konteineris 
-void Domenai(set<string>& domenas) { // domenu  galunes sudedam i set
+void Domenai(set<string>& domenas) { // domenu  galunes sudedam i set 
+    //set auto surusiuoja irgi asociatyvus
     ifstream Domenai_failas;
     string tld; //saugos domeno pabaiga 
     string failoPavadinimas = "domenai.txt";
@@ -120,7 +121,8 @@ void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {
     }
 }*/
 
-void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {//du map konteineriai saugoti  kiek kartu ir kuriose ielutese 
+void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {
+    //du map konteineriai saugo zodi ir eilutes numeri  automatiskai  zodzius surusiuoja
     string eilute, zodis;
     int eilutes_nr = 1;
     while (getline(failas, eilute)) {// skaitymas is failo prasideda 
