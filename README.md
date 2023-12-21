@@ -2,9 +2,9 @@
 Šio projekto tikslas yra sukurti programą, kuri geba iš teksto išrinkti žodžius kurie kartojasi, daugiau, negu vieną kartą. Antra užduoties dalis, iš tų žodžių kurie kartojasi daugiau negu vieną kartąpadaryti lentele, kurioje būtų žodis ir nurodoma vieta, kur randasi žodis, tai yra eilutė. Trečia užduotis yra pateikti domenus, kurie yra tekste. Visos lentelės gali būti bendrai išvestos į failą arba į ekraną, priklausomai nuo vartotojo pasirinkimo.
 # Tekstas
 Analizuojamas teksta yra paimtas iš https://lt.wikipedia.org/wiki/Eurovizijos_dain%C5%B3_konkursas_2023. Jame yra pateikaiam informacija lietuviu kalba apie 2023 metų euroviziją. Pats tekstas nukopijuotas ir patalpintas į tekstinį failą Tekstas.txt. Taip pat į tekstinį failą yra įkelti visi domenia, kurie buvo pateikti Wikipedia 2023 metų eurovizija puslapio apačioje. 
-|:----------------------------:	|:-------------:	|
+
 |         Žodžių skaičiu      	|      1244     	| 
-|:----------------------------:	|:-------------:	|
+|:----------------------------:|:-------------:|
  # Projekto aprašas
 Pirmoje užduoties dalyje yra sukuriama lentelė, kurioje pateikiama informacija apie žodžius, kurie kartjasi daugiau, negu vieną kartą. Lentelę sudaro 2 stulpeliai ,,Žodis'' ir ,,Pasikartojimu Skaicius'', zodziai yra surašomi nuo a iki z.
 Į failą išvedimo fragmentas:
