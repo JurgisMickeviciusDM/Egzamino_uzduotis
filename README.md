@@ -19,6 +19,11 @@ Trečioje užduoties dalyje yra pateikiama lentelė, kurioje išvedama informaci
 Tam, kad būtų tinakmai išskiriami adresai, naudojau sąrašą domenų galunių, dar vadinamų TLD(Top-level domain) https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains, tačiau juos ėmiau iš svetainės: https://data.iana.org/TLD/tlds-alpha-by-domain.txt
 (žiūrėjimo data 2023-12-18, buvo 1454 domenai, tai yra galūnės). Tokį principą nustatinėjant url adresus pasirinkau, nes kitu atveju programa galėtų išvesti ir tokius adressu, kaip PVZ: www.universitetas.vilnius ar www.universitetas.vu, nors tokie domenai vilnius,vu nėra tikros domenų galūnės. Jie yra saugomi faile Domenai.txt ir paleidus programa iš ten imami.
 # Lietuviškas tekstas ir lygiavimas lentelėse:
-Kadangi naudojant lietuvišką tekstą, tam, kad nekiltų problemų reikia naudoti UTF-8 koduotę
-![image](https://github.com/JurgisMickeviciusDM/Egzamino_uzduotis/assets/144474535/dda88bf3-9554-406f-86d7-3e9c8808cdf3)
+Ršydamas progrą susidūriau su keleta problemų, kaip viena iš jų būtų lietuviškos raidės. Nors ir žinau, kad reikia saugoti tekstinius fialus UTF-8 koduote, Visual Studio yra default nustatytmais pritaikyta UTF-8 koduotei, taičau pradžioje neišvesdavo lietuviškų raidžių,. Pertikrinus visur, kad būtų tinkama koduote atsirado kita problema, kad išvedinėjant tekstą dingdavo tolygumas lentelėse, tai yra gražus rykaivimas, kaip eilučių ir stulpelių, pvz esant žodžiui šalis, brukšnelis | perstumiamas per 1 ,,tarpą''. Tad teko ieškoti sprendimo, pasitelkes formums radau, kad reiktų pabandyti išvedime taikyti tokia funkcija:
+![image](https://github.com/JurgisMickeviciusDM/Egzamino_uzduotis/assets/144474535/146ac28a-b3b0-4f5b-8df5-b10f4cf82bd3)
+Taip pat apsiračiau ir atskirtai lietuviškas raides, kad tirkai jos būtų mažosiomis paverčiamos, prieš paleidžiant kodą.
+![image](https://github.com/JurgisMickeviciusDM/Egzamino_uzduotis/assets/144474535/32250c97-d32d-49bb-b5b6-bbc11a5a7fc0)
+Jos dėka visi išvedime esantys stulepliai ir eilutės susitvarkė, nenebuvo tos problemos, kad esant atitinakam skaičiui lietuviškų radžių ir eilutė yra pastumiama per tiek tarpų.
 https://en.cppreference.com/w/cpp/language/ascii
+
+
