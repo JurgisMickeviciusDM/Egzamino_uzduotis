@@ -80,7 +80,7 @@ void Domenai(set<string>& domenas) { // domenu  galunes sudedam i set
 }
 
 void Adresas(const string& tekstas, const set<string>& domenas, vector<string>& urls) {
-    string tldreguliari_israiska;//reguliari israiska
+    string tldreguliari_israiska;//reguliari israiska adresui atpazinti 
     for (const auto& tld : domenas) {//for ciklas iteruos per domenas
         if (!tldreguliari_israiska.empty()) {//jei netuscia
             tldreguliari_israiska += "|";
@@ -120,16 +120,16 @@ void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {
         eilutes_nr++;
     }
 }*/
-
+/*
 void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {
     //du map konteineriai saugo zodi ir eilutes numeri  automatiskai  zodzius surusiuoja
     string eilute, zodis;
     int eilutes_nr = 1;
     while (getline(failas, eilute)) {// skaitymas is failo prasideda 
         istringstream ss(eilute);//srautas þodþiø atskyrimui eilutëje
-        map<string, int> eilutes_zodziai;// Laikinas map asociatybus þodþiø pasikartojimui eilutëje saugoti
+        map<string, int> eilutes_zodziai;// Laikinas map asociatyvus þodþiø pasikartojimui eilutëje saugoti
 
-        while (ss >> zodis) {//skaitymas 
+        while (ss >> zodis) {//skaitymas ir skaiciuos zodzius
            
             zodis.erase(remove_if(zodis.begin(), zodis.end(),
                 [](unsigned char c) { return !isalpha(c) && c < 128; }), zodis.end());// pasalina 
@@ -146,7 +146,40 @@ void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi) {
         }
         eilutes_nr++;//padidiname eilute nr ir einame i kita 
     }
+}*/
+
+void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi, int&pir_zodziai_sk) {
+    //du map konteineriai saugo zodi ir eilutes numeri  automatiskai  zodzius surusiuoja
+    string eilute, zodis;
+    int eilutes_nr = 1;
+    pir_zodziai_sk = 0;// nustatau, kad bus 0  
+    while (getline(failas, eilute)) {// skaitymas is failo prasideda 
+        istringstream ss(eilute);//srautas þodþiø atskyrimui eilutëje
+        map<string, int> eilutes_zodziai;// Laikinas map asociatyvus þodþiø pasikartojimui eilutëje saugoti
+
+        while (ss >> zodis) {//skaitymas ir skaiciuos zodzius
+
+            zodis.erase(remove_if(zodis.begin(), zodis.end(),
+                [](unsigned char c) { return !isalpha(c) && c < 128; }), zodis.end());// pasalina 
+            //jei c nera raide arba is ascii lenteles 
+            mazosios_raides(zodis);// i mazasias pakeiciame raides  
+
+            if (!zodis.empty() && zodis.find_first_of(".,-„“–“”") == string::npos) {
+                eilutes_zodziai[zodis]++;// tikriname ar netuscias zodis ir ar nera zenklu
+                //jei tenkins saugome laikinam map eilutes_zodziai
+
+                if (zodis.find("pir") != string::npos) {
+                    pir_zodziai_sk++; // skaiciuos zodzius
+                }
+            }
+        }
+        for (const auto& zodzio_pora : eilutes_zodziai) {
+            sk_zodi[zodzio_pora.first][eilutes_nr] = zodzio_pora.second;// saugome i map sk_zodi 
+        }
+        eilutes_nr++;//padidiname eilute nr ir einame i kita 
+    }
 }
+
 
 using Sp_funkcija = function<void(ostream&)>;
 
@@ -217,7 +250,7 @@ void ZodziuSkaicius(std::ostream& os, const std::map<std::string, int>& zodziu__
                 << "| " << std::left << std::setw(34) << zodzio_pora.second << left<< " kart." << " |" << std::endl;
         }
     }
-
+    
     os << "-----------------------------------------------------------------------" << std::endl;
 }
 
