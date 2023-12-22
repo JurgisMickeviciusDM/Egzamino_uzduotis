@@ -1,6 +1,8 @@
 # Papildoma
 ![image](https://github.com/JurgisMickeviciusDM/Egzamino_uzduotis/assets/144474535/5a685fd6-684a-4796-8266-24bc02c0d86a)
+![image](https://github.com/JurgisMickeviciusDM/Egzamino_uzduotis/assets/144474535/cfce6073-6f43-41cc-afa5-43468e489666)
 ![image](https://github.com/JurgisMickeviciusDM/Egzamino_uzduotis/assets/144474535/4a6b693a-f2f6-406e-902f-1b748c989ade)
+
 
 
 
