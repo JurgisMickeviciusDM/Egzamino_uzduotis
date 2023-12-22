@@ -11,16 +11,19 @@
 #include <iomanip>
 #include <functional>
 #include <Windows.h>
+#include "naudotojas.h"
+
 
 using namespace std;
 
 void naudotojas(std::string& Ivedimas);
 void Domenai(set<string>& domenas);
 void Adresas(const string& tekstas, const set<string>& domenas, vector<string>& urls);
-void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi);
+void Skaiciuoti_Zodzius(ifstream& failas, map<string, map<int, int>>& sk_zodi, int& pir_zodziai_sk);
 using Sp_funkcija = function<void(ostream&)>;
 void Isvedimas(const string& Ivedimas, const vector<Sp_funkcija>& sp, const vector<string>& Failopavad);
-void ZodziuSkaicius(ostream& os, const map<string, int>& zodziu__viso);
+
+void ZodziuSkaicius(std::ostream& os, const std::map<std::string, int>& zodziu__viso, int pir_zodziai_sk);
 void ZodisVieta(ostream& os, const map<string, map<int, int>>& zod_vieta, const map<string, int>& zod_viso_sk);
 void Domenai_adresai(ostream& os, const vector<string>& urls);
 
@@ -28,7 +31,7 @@ void Domenai_adresai(ostream& os, const vector<string>& urls);
 
 int main() {
     SetConsoleOutputCP(CP_UTF8); //kodavimui utf-8
-    setlocale(LC_ALL, "en_US.UTF-8");
+    setlocale(LC_ALL, "LT.UTF-8");
     string Ivedimas;
     naudotojas(Ivedimas); //naudotojo funckija 
 
@@ -46,16 +49,19 @@ int main() {
     failas.close();
 
     set<string> domenas;
-    Domenai(domenas);// nsuakitome su domenas funckcija domenus 
+    Domenai(domenas);// nuskaitome  domenas funckcija domenus 
 
     map<string, map<int, int>> sk_zodi;// asciatyvus konteineris map zodziam ir kartu skaiciu saugoit
     failas.open("Tekstas.txt");
+    int pir_zodziai_sk = 0;
     if (!failas.is_open()) {
         cerr << "Nepavyko atidaryti failo." << endl;
         return 1;
     }
 
-    Skaiciuoti_Zodzius(failas, sk_zodi);//skaiciavimas zodziu
+    Skaiciuoti_Zodzius(failas, sk_zodi, pir_zodziai_sk);//skaiciavimas zodziu
+  //  cout << " pir skaicius zodziu: " << pir_zodziai_sk << endl;
+
     failas.close();
 
     map<string, int> bendras_sk_zodi;//asociatyvus konteineris saugo pasikartojimu sk 
@@ -70,13 +76,13 @@ int main() {
     Adresas(tekstas, domenas, url); // url nustatymas 
 
     if (Ivedimas == "e") {
-        ZodziuSkaicius(cout, bendras_sk_zodi);
+        ZodziuSkaicius(cout, bendras_sk_zodi, pir_zodziai_sk);
         ZodisVieta(cout, sk_zodi, bendras_sk_zodi);
         Domenai_adresai(cout, url);
     }
     else if (Ivedimas == "f") {
         ofstream outFile1("Zodziai_pasikartojimu_skacius.txt");
-        ZodziuSkaicius(outFile1, bendras_sk_zodi);
+        ZodziuSkaicius(outFile1, bendras_sk_zodi, pir_zodziai_sk);
         outFile1.close();
 
         ofstream outFile2("Zodziu_pasikartojimu_eilutes.txt");

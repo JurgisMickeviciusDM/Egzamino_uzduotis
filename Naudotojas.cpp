@@ -230,7 +230,7 @@ void ZodziuSkaicius(ostream& os, const map<string, int>& zodziu__viso) {
 }
 */
 
-void ZodziuSkaicius(std::ostream& os, const std::map<std::string, int>& zodziu__viso) {
+void ZodziuSkaicius(std::ostream& os, const std::map<std::string, int>& zodziu__viso, int pir_zodziai_sk) {
     os << "|---------------------------------------------------------------------|" << std::endl;
     os << "| Zodis                    | Pasikartojimu skaicius                   |" << std::endl;
     os << "|---------------------------------------------------------------------|" << std::endl;
@@ -252,6 +252,9 @@ void ZodziuSkaicius(std::ostream& os, const std::map<std::string, int>& zodziu__
     }
     
     os << "-----------------------------------------------------------------------" << std::endl;
+    os << "|---------------------------------------------------------------------|" << endl;
+    os << "| Zodziu su 'pir' skaicius | " << pir_zodziai_sk << " |" << endl;
+    os << "|---------------------------------------------------------------------|" << endl;
 }
 
 
