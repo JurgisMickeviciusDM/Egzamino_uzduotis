@@ -1,3 +1,8 @@
+# Papildoma
+![image](https://github.com/JurgisMickeviciusDM/Egzamino_uzduotis/assets/144474535/5a685fd6-684a-4796-8266-24bc02c0d86a)
+
+
+
 # Egzamino_užduotis
 Šio projekto tikslas yra sukurti programą, kuri geba iš teksto išrinkti žodžius kurie kartojasi, daugiau, negu vieną kartą. Antra užduoties dalis, iš tų žodžių kurie kartojasi daugiau negu vieną kartą padaryti lentele, kurioje būtų žodis ir nurodoma vieta, kur randasi žodis, tai yra eilutė. Trečia užduotis yra pateikti domenus, kurie yra tekste. Visos lentelės gali būti bendrai išvestos į failą arba į ekraną, priklausomai nuo vartotojo pasirinkimo.
 # Tekstas
